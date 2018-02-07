@@ -17,6 +17,9 @@ GLFWwindow *window;
 GLfloat red, green, blue;
 GLfloat ty = 0.0f;
 GLfloat tx = 0.0f;
+double tiempoAnterior = 0.0;
+double velocidad = 0.7;
+
 
 void actualizar() { 
 	//Aqui esta bien para cambiar los valores de las variables de mi programa
@@ -28,13 +31,41 @@ void actualizar() {
 	if (red > 1) red = 0;
 	if (green > 1) green = 0;
 	if (blue > 1) blue = 0;*/
+	double tiempoActual = glfwGetTime();
+	double tiempoTranscurrido = tiempoActual - tiempoAnterior;
 
+	//ARRIBA
 	int estadoArriba = glfwGetKey(window, GLFW_KEY_UP);
 	if (estadoArriba == GLFW_PRESS)
 	{
 		if (ty < 1)
-			ty += 0.05f;
+			ty += velocidad * tiempoTranscurrido;
 	}
+	
+
+	//ABAJO
+	int estadoAbajo = glfwGetKey(window, GLFW_KEY_DOWN);
+	if (estadoAbajo == GLFW_PRESS)
+	{
+		if (ty > -1)
+			ty -= velocidad * tiempoTranscurrido;
+	}
+
+
+	//DERECHA
+	int estadoDerecha = glfwGetKey(window, GLFW_KEY_RIGHT);
+	if (estadoDerecha == GLFW_PRESS)
+	{
+		
+		if (tx < 1)
+			tx += velocidad * tiempoTranscurrido;
+		
+		
+	}
+
+
+	tiempoAnterior = tiempoActual;
+
 }
 
 void dibujar() {
@@ -127,6 +158,8 @@ int main()
 	red = green = blue = 0.0f;
 
 	//glfwSetKeyCallback(window, key_callback);
+
+	tiempoAnterior = glfwGetTime();
 
 	//Ciclo de dibujo
 	while (!glfwWindowShouldClose(window)) {
